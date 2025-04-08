@@ -1,0 +1,157 @@
+site_name: evap-docs
+site_description: Unofficial Operational Reservoir Evapotranspiration API Documentation
+
+site_author: Samapriya Roy
+site_url: https://github.com/samapriya/evap-docs
+
+# Repository
+repo_name: evap-docs
+repo_url: https://github.com/samapriya/evap-docs
+edit_uri: blob/main/docs/
+
+# Copyright
+copyright: "Copyright &copy; 2025 Samapriya Roy"
+
+# Configuration
+theme:
+  name: "material"
+  custom_dir: overrides
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tooltips
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+
+  # 404 page
+  static_templates:
+    - 404.html
+
+  # Don't include MkDocs' JavaScript
+  include_search_page: false
+  search_index_only: true
+
+  # Default values, taken from mkdocs_theme.yml
+  language: en
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  font:
+    text: Google Sans
+    code: Regular
+  favicon: assets/favicon.png
+  icon:
+    logo: logo
+
+# Options
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/samapriya
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/samapriya
+    - icon: fontawesome/brands/medium
+      link: https://medium.com/@samapriyaroy
+    - icon: fontawesome/brands/mastodon
+      link: https://mapstodon.space/@samapriya
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/samapriyaroy
+
+  # analytics:
+  #   provider: google
+  #   property: G-P5Q8CHNTVP
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+  - minify:
+      minify_html: true
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/mkdocs.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra_css:
+  - stylesheets/extra.css
+
+# Page tree
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Overview: started/getting-started.md
+      - Installation: started/authentication.md
+      - API Playground: started/api-playground.md
+  - API Endpoints:
+      - Info Endpoints: endpoints/info-endpoints.md
+      - Metadata Endpoints: endpoints/metadata-endpoints.md
+      - Time Series Endpoints: endpoints/timeseries-endpoints.md
+  - Examples: examples.md
+  - Appendix: appendix.md
+  - License: license.md
