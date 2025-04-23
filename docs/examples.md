@@ -20,6 +20,21 @@ This section provides example code snippets for common tasks using the Reservoir
     }
     ```
 
+=== "R"
+
+    ```r
+    library(httr)
+    library(jsonlite)
+    library(dplyr)
+    library(ggplot2)
+    library(lubridate)
+
+    # API configuration
+    API_KEY <- "your_api_key_here"
+    BASE_URL <- "https://api-url.example"  # Replace with the actual API base URL
+    HEADERS <- add_headers(`api-key` = API_KEY)
+    ```
+
 === "cURL"
 
     ```sh
@@ -50,6 +65,31 @@ This section provides example code snippets for common tasks using the Reservoir
     print("First 5 reservoirs:")
     for res in reservoirs[:5]:
         print(f"- {res}")
+    ```
+
+=== "R"
+
+    ```r
+    get_reservoirs <- function() {
+      # Get a list of available reservoirs
+      url <- paste0(BASE_URL, "/info/list_RES_NAMES")
+      response <- GET(url, HEADERS)
+
+      if (status_code(response) == 200) {
+        return(fromJSON(content(response, "text", encoding = "UTF-8")))
+      } else {
+        print(paste("Error:", status_code(response)))
+        return(NULL)
+      }
+    }
+
+    # Example usage
+    reservoirs <- get_reservoirs()
+    print(paste("Number of reservoirs:", length(reservoirs)))
+    print("First 5 reservoirs:")
+    for (i in 1:5) {
+      print(paste("-", reservoirs[i]))
+    }
     ```
 
 === "cURL"
@@ -89,6 +129,37 @@ This section provides example code snippets for common tasks using the Reservoir
         print(f"  Latitude: {res['latitude']}")
         print(f"  Longitude: {res['longitude']}")
         print(f"  State: {res['state']}")
+    ```
+
+=== "R"
+
+    ```r
+    get_reservoir_metadata <- function(reservoir_names) {
+      # Get metadata for specified reservoirs
+      url <- paste0(BASE_URL, "/metadata/reservoirs")
+      params <- list(
+        RES_NAMES = paste(reservoir_names, collapse = ","),
+        output_format = "json"
+      )
+
+      response <- GET(url, HEADERS, query = params)
+
+      if (status_code(response) == 200) {
+        return(fromJSON(content(response, "text", encoding = "UTF-8")))
+      } else {
+        print(paste("Error:", status_code(response)))
+        return(NULL)
+      }
+    }
+
+    # Example usage
+    reservoir_metadata <- get_reservoir_metadata(c("LAKE ALICE", "LAKE ESTES"))
+    for (i in 1:length(reservoir_metadata$res_name)) {
+      print(paste("Reservoir:", reservoir_metadata$res_name[i]))
+      print(paste("  Latitude:", reservoir_metadata$latitude[i]))
+      print(paste("  Longitude:", reservoir_metadata$longitude[i]))
+      print(paste("  State:", reservoir_metadata$state[i]))
+    }
     ```
 
 === "cURL"
@@ -143,6 +214,54 @@ This section provides example code snippets for common tasks using the Reservoir
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+    ```
+
+=== "R"
+
+    ```r
+    get_reservoir_timeseries <- function(reservoir_name, start_date, end_date) {
+      # Get timeseries data for a reservoir
+      url <- paste0(BASE_URL, "/timeseries/daily/reservoirs/daterange")
+      params <- list(
+        RES_NAMES = reservoir_name,
+        datasets = "nete-volume-calcs",
+        variables = "NetE,E_volume",
+        start_date = start_date,
+        end_date = end_date,
+        units = "metric",
+        output_format = "json"
+      )
+
+      response <- GET(url, HEADERS, query = params)
+
+      if (status_code(response) == 200) {
+        return(fromJSON(content(response, "text", encoding = "UTF-8")))
+      } else {
+        print(paste("Error:", status_code(response)))
+        return(NULL)
+      }
+    }
+
+    # Example usage
+    data <- get_reservoir_timeseries("LAKE ALICE", "2020-01-01", "2020-12-31")
+
+    # Convert to data frame for analysis
+    df <- as.data.frame(data)
+    df$date <- as.Date(df$date)
+
+    # Plot the data
+    ggplot(df, aes(x = date, y = NetE)) +
+      geom_line() +
+      labs(
+        title = "Net Evaporation for LAKE ALICE (2020)",
+        x = "Date",
+        y = "Net Evaporation (mm/day)"
+      ) +
+      theme_minimal() +
+      theme(
+        panel.grid = element_line(color = "gray90"),
+        plot.title = element_text(hjust = 0.5)
+      )
     ```
 
 === "cURL"
@@ -202,6 +321,69 @@ This section provides example code snippets for common tasks using the Reservoir
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+    ```
+
+=== "R"
+
+    ```r
+    compare_reservoirs <- function(reservoir_names, start_date, end_date, variable = "NetE") {
+      # Compare a variable between multiple reservoirs
+      url <- paste0(BASE_URL, "/timeseries/daily/reservoirs/daterange")
+      params <- list(
+        RES_NAMES = paste(reservoir_names, collapse = ","),
+        datasets = "nete-volume-calcs",
+        variables = variable,
+        start_date = start_date,
+        end_date = end_date,
+        units = "metric",
+        output_format = "json"
+      )
+
+      response <- GET(url, HEADERS, query = params)
+
+      if (status_code(response) == 200) {
+        return(fromJSON(content(response, "text", encoding = "UTF-8")))
+      } else {
+        print(paste("Error:", status_code(response)))
+        return(NULL)
+      }
+    }
+
+    # Example usage
+    reservoirs_to_compare <- c("LAKE ALICE", "LAKE ESTES", "RUEDI RESERVOIR")
+    comparison_data <- compare_reservoirs(reservoirs_to_compare, "2020-06-01", "2020-08-31")
+
+    # Process and visualize data
+    df <- as.data.frame(comparison_data)
+    df$date <- as.Date(df$date)
+
+    # Prepare data for plotting
+    df_wide <- df %>%
+      pivot_wider(
+        id_cols = date,
+        names_from = res_name,
+        values_from = NetE
+      )
+
+    # Reshape for ggplot
+    df_long <- df %>%
+      select(date, res_name, NetE)
+
+    # Plot the data
+    ggplot(df_long, aes(x = date, y = NetE, color = res_name)) +
+      geom_line() +
+      labs(
+        title = "Net Evaporation Comparison (Summer 2020)",
+        x = "Date",
+        y = "Net Evaporation (mm/day)",
+        color = "Reservoir"
+      ) +
+      theme_minimal() +
+      theme(
+        panel.grid = element_line(color = "gray90"),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "bottom"
+      )
     ```
 
 === "cURL"
@@ -264,6 +446,64 @@ This section provides example code snippets for common tasks using the Reservoir
     plt.show()
     ```
 
+=== "R"
+
+    ```r
+    get_monthly_evaporation_volumes <- function(reservoir_name, year) {
+      # Calculate monthly evaporation volumes for a reservoir
+      start_date <- paste0(year, "-01-01")
+      end_date <- paste0(year, "-12-31")
+
+      url <- paste0(BASE_URL, "/timeseries/daily/reservoirs/daterange")
+      params <- list(
+        RES_NAMES = reservoir_name,
+        datasets = "nete-volume-calcs",
+        variables = "E_volume",
+        start_date = start_date,
+        end_date = end_date,
+        units = "metric",
+        output_format = "json"
+      )
+
+      response <- GET(url, HEADERS, query = params)
+
+      if (status_code(response) == 200) {
+        data <- fromJSON(content(response, "text", encoding = "UTF-8"))
+        df <- as.data.frame(data)
+        df$date <- as.Date(df$date)
+
+        # Calculate monthly totals
+        monthly_data <- df %>%
+          mutate(month = format(date, "%b")) %>%
+          group_by(month) %>%
+          summarize(E_volume = sum(E_volume, na.rm = TRUE)) %>%
+          mutate(month = factor(month, levels = month.abb))
+
+        return(monthly_data)
+      } else {
+        print(paste("Error:", status_code(response)))
+        return(NULL)
+      }
+    }
+
+    # Example usage
+    monthly_volumes <- get_monthly_evaporation_volumes("LAKE MEAD", 2020)
+
+    # Plot monthly volumes
+    ggplot(monthly_volumes, aes(x = month, y = E_volume)) +
+      geom_col(fill = "steelblue") +
+      labs(
+        title = "Monthly Evaporation Volumes for LAKE MEAD (2020)",
+        x = "Month",
+        y = "Evaporation Volume (cubic meters)"
+      ) +
+      theme_minimal() +
+      theme(
+        panel.grid = element_line(color = "gray90"),
+        plot.title = element_text(hjust = 0.5)
+      )
+    ```
+
 === "cURL"
 
     ```sh
@@ -318,6 +558,62 @@ This section provides example code snippets for common tasks using the Reservoir
     for idx, row in monthly_weather.iterrows():
         month = idx.strftime('%b %Y')
         print(f"{month} | {row['pr']:.1f} | {row['tmmx_c']:.1f} | {row['tmmn_c']:.1f}")
+    ```
+
+=== "R"
+
+    ```r
+    get_weather_data <- function(reservoir_name, start_date, end_date) {
+      # Get weather data for a reservoir
+      url <- paste0(BASE_URL, "/timeseries/daily/reservoirs/daterange")
+      params <- list(
+        RES_NAMES = reservoir_name,
+        datasets = "rtma",
+        variables = "pr,tmmx_c,tmmn_c,vpd_kpa,srad",
+        start_date = start_date,
+        end_date = end_date,
+        units = "metric",
+        output_format = "json"
+      )
+
+      response <- GET(url, HEADERS, query = params)
+
+      if (status_code(response) == 200) {
+        return(fromJSON(content(response, "text", encoding = "UTF-8")))
+      } else {
+        print(paste("Error:", status_code(response)))
+        return(NULL)
+      }
+    }
+
+    # Example usage
+    weather_data <- get_weather_data("LAKE POWELL", "2020-06-01", "2020-08-31")
+    df <- as.data.frame(weather_data)
+    df$date <- as.Date(df$date)
+
+    # Calculate monthly averages
+    monthly_weather <- df %>%
+      mutate(month = format(date, "%b %Y")) %>%
+      group_by(month) %>%
+      summarize(
+        pr_total = sum(pr, na.rm = TRUE),
+        tmmx_c_avg = mean(tmmx_c, na.rm = TRUE),
+        tmmn_c_avg = mean(tmmn_c, na.rm = TRUE),
+        vpd_kpa_avg = mean(vpd_kpa, na.rm = TRUE),
+        srad_avg = mean(srad, na.rm = TRUE)
+      )
+
+    # Print monthly summary
+    cat("Monthly Weather Summary for LAKE POWELL (Summer 2020):\n")
+    cat("Month | Total Precip (mm) | Avg Max Temp (°C) | Avg Min Temp (°C)\n")
+
+    for (i in 1:nrow(monthly_weather)) {
+      cat(sprintf("%s | %.1f | %.1f | %.1f\n",
+                 monthly_weather$month[i],
+                 monthly_weather$pr_total[i],
+                 monthly_weather$tmmx_c_avg[i],
+                 monthly_weather$tmmn_c_avg[i]))
+    }
     ```
 
 === "cURL"
@@ -404,6 +700,87 @@ This section provides example code snippets for common tasks using the Reservoir
     plt.show()
     ```
 
+=== "R"
+
+    ```r
+    combine_datasets <- function(reservoir_name, start_date, end_date) {
+      # Combine evaporation and weather data for analysis
+
+      # Get evaporation data
+      evap_url <- paste0(BASE_URL, "/timeseries/daily/reservoirs/daterange")
+      evap_params <- list(
+        RES_NAMES = reservoir_name,
+        datasets = "nete-volume-calcs",
+        variables = "NetE,E_volume",
+        start_date = start_date,
+        end_date = end_date,
+        units = "metric",
+        output_format = "json"
+      )
+
+      evap_response <- GET(evap_url, HEADERS, query = evap_params)
+
+      # Get weather data
+      weather_url <- paste0(BASE_URL, "/timeseries/daily/reservoirs/daterange")
+      weather_params <- list(
+        RES_NAMES = reservoir_name,
+        datasets = "rtma",
+        variables = "pr,tmmx_c,tmmn_c,vpd_kpa,srad",
+        start_date = start_date,
+        end_date = end_date,
+        units = "metric",
+        output_format = "json"
+      )
+
+      weather_response <- GET(weather_url, HEADERS, query = weather_params)
+
+      if (status_code(evap_response) == 200 && status_code(weather_response) == 200) {
+        evap_data <- as.data.frame(fromJSON(content(evap_response, "text", encoding = "UTF-8")))
+        weather_data <- as.data.frame(fromJSON(content(weather_response, "text", encoding = "UTF-8")))
+
+        # Prepare data
+        evap_data$date <- as.Date(evap_data$date)
+        weather_data$date <- as.Date(weather_data$date)
+
+        # Merge datasets
+        combined_data <- inner_join(
+          evap_data,
+          weather_data,
+          by = c("date", "res_name")
+        )
+
+        return(combined_data)
+      } else {
+        print(paste("Error:", status_code(evap_response), "or", status_code(weather_response)))
+        return(NULL)
+      }
+    }
+
+    # Example usage
+    combined_data <- combine_datasets("LAKE MEAD", "2020-06-01", "2020-08-31")
+
+    # Calculate correlation between variables
+    correlation <- cor(combined_data[, c("NetE", "tmmx_c", "vpd_kpa", "srad")],
+                       use = "complete.obs")
+    cat("Correlation Matrix:\n")
+    print(correlation)
+
+    # Plot relationship between temperature and evaporation
+    ggplot(combined_data, aes(x = tmmx_c, y = NetE)) +
+      geom_point() +
+      geom_smooth(method = "lm", se = TRUE, color = "blue") +
+      labs(
+        title = "Relationship Between Maximum Temperature and Net Evaporation",
+        x = "Maximum Temperature (°C)",
+        y = "Net Evaporation (mm/day)"
+      ) +
+      theme_minimal() +
+      theme(
+        panel.grid = element_line(color = "gray90"),
+        plot.title = element_text(hjust = 0.5)
+      )
+    ```
+
 === "cURL"
 
     ```sh
@@ -450,6 +827,41 @@ This section provides example code snippets for common tasks using the Reservoir
 
     # Example usage
     reservoir_list = ["LAKE POWELL", "LAKE MEAD", "FLAMING GORGE RESERVOIR"]
+    export_data_to_csv(reservoir_list, "2020-01-01", "2020-12-31", "colorado_river_basin_evaporation_2020.csv")
+    ```
+
+=== "R"
+
+    ```r
+    export_data_to_csv <- function(reservoir_names, start_date, end_date, output_file) {
+      # Export data for multiple reservoirs to CSV
+      url <- paste0(BASE_URL, "/timeseries/daily/reservoirs/daterange")
+      params <- list(
+        RES_NAMES = paste(reservoir_names, collapse = ","),
+        datasets = "nete-volume-calcs",
+        variables = "NetE,E_volume",
+        start_date = start_date,
+        end_date = end_date,
+        units = "metric",
+        output_format = "json"
+      )
+
+      response <- GET(url, HEADERS, query = params)
+
+      if (status_code(response) == 200) {
+        data <- fromJSON(content(response, "text", encoding = "UTF-8"))
+        df <- as.data.frame(data)
+        write.csv(df, file = output_file, row.names = FALSE)
+        cat(paste("Data exported to", output_file, "\n"))
+        return(TRUE)
+      } else {
+        cat(paste("Error:", status_code(response), "\n"))
+        return(FALSE)
+      }
+    }
+
+    # Example usage
+    reservoir_list <- c("LAKE POWELL", "LAKE MEAD", "FLAMING GORGE RESERVOIR")
     export_data_to_csv(reservoir_list, "2020-01-01", "2020-12-31", "colorado_river_basin_evaporation_2020.csv")
     ```
 
@@ -510,6 +922,68 @@ This section provides example code snippets for common tasks using the Reservoir
     plt.show()
     ```
 
+=== "R"
+
+    ```r
+    get_station_data <- function(station_names, start_date, end_date) {
+      # Get data for weather stations
+      url <- paste0(BASE_URL, "/timeseries/stations/daterange")
+      params <- list(
+        STA_NAMES = paste(station_names, collapse = ","),
+        variables = "ATemp,RH,WS,WD",
+        start_date = start_date,
+        end_date = end_date,
+        units = "metric",
+        output_format = "json"
+      )
+
+      response <- GET(url, HEADERS, query = params)
+
+      if (status_code(response) == 200) {
+        return(fromJSON(content(response, "text", encoding = "UTF-8")))
+      } else {
+        cat(paste("Error:", status_code(response), "\n"))
+        return(NULL)
+      }
+    }
+
+    # Example usage
+    stations <- c("LAKE MEAD_STATION", "LAKE POWELL_STATION")
+    station_data <- get_station_data(stations, "2020-06-01", "2020-06-30")
+
+    # Convert to data frame
+    df <- as.data.frame(station_data)
+    df$date <- as.Date(df$date)
+
+    # Prepare data for plotting
+    df_wide <- df %>%
+      pivot_wider(
+        id_cols = date,
+        names_from = sta_name,
+        values_from = ATemp
+      )
+
+    # Reshape for ggplot
+    df_long <- df %>%
+      select(date, sta_name, ATemp)
+
+    # Plot temperature comparison between stations
+    ggplot(df_long, aes(x = date, y = ATemp, color = sta_name)) +
+      geom_line() +
+      labs(
+        title = "Air Temperature Comparison Between Stations (June 2020)",
+        x = "Date",
+        y = "Air Temperature (°C)",
+        color = "Station"
+      ) +
+      theme_minimal() +
+      theme(
+        panel.grid = element_line(color = "gray90"),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "bottom"
+      )
+    ```
+
 === "cURL"
 
     ```sh
@@ -518,7 +992,7 @@ This section provides example code snippets for common tasks using the Reservoir
          -H "api-key: ${API_KEY}"
     ```
 
-## GIS Integration (Using GeoPandas)
+## GIS Integration
 
 === "Python"
 
@@ -599,6 +1073,79 @@ This section provides example code snippets for common tasks using the Reservoir
 
     # Example usage
     reservoir_map = plot_reservoir_map("2020-07-15")
+    ```
+
+=== "R"
+
+    ```r
+    library(sf)
+    library(raster)
+    library(ggplot2)
+    library(viridis)
+
+    plot_reservoir_map <- function(date) {
+      # Plot a map of reservoirs with evaporation values for a specific date
+      url <- paste0(BASE_URL, "/timeseries/daily/reservoirs/date")
+      params <- list(
+        datasets = "nete-volume-calcs",
+        variables = "NetE",
+        date = date,
+        units = "metric",
+        output_format = "json",
+        also_return = "latitude,longitude"
+      )
+
+      response <- GET(url, HEADERS, query = params)
+
+      if (status_code(response) == 200) {
+        data <- fromJSON(content(response, "text", encoding = "UTF-8"))
+        df <- as.data.frame(data)
+
+        # Create spatial data
+        gdf <- st_as_sf(df, coords = c("longitude", "latitude"), crs = 4326)
+
+        # Get US states outline (requires having US state boundaries loaded)
+        # For this example, assuming 'us_states' is available or could be loaded from a package
+        # This is a placeholder - in a real script, you would need to load an actual shapefile
+        # For example using: us_states <- st_read("path/to/us-states.shp")
+
+        # Create a western_states subset
+        western_states <- c("Washington", "Oregon", "California", "Idaho", "Nevada",
+                           "Montana", "Wyoming", "Utah", "Colorado", "Arizona",
+                           "New Mexico", "Texas", "North Dakota", "South Dakota",
+                           "Nebraska", "Kansas", "Oklahoma")
+
+        # Placeholder - this would filter your actual spatial data
+        # western_states_geo <- us_states[us_states$name %in% western_states, ]
+
+        # Plot
+        # This is a simplified version - in a real application, you would use
+        # the actual western_states_geo spatial data
+        ggplot() +
+          # geom_sf(data = western_states_geo, fill = NA, color = "gray") +
+          geom_sf(data = gdf, aes(color = NetE), size = 3) +
+          scale_color_viridis(option = "plasma", name = "Net Evaporation\n(mm/day)") +
+          labs(
+            title = paste("Reservoir Net Evaporation on", date),
+            x = "Longitude",
+            y = "Latitude"
+          ) +
+          theme_minimal() +
+          theme(
+            plot.title = element_text(hjust = 0.5),
+            legend.position = "right"
+          )
+
+        return(gdf)
+      } else {
+        cat(paste("Error:", status_code(response), "\n"))
+        return(NULL)
+      }
+    }
+
+    # Example usage
+    # reservoir_map <- plot_reservoir_map("2020-07-15")
+    # print(reservoir_map)  # This would display the map if the sf object is available
     ```
 
 === "cURL"

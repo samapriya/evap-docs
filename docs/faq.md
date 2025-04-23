@@ -1,137 +1,71 @@
 # Frequently Asked Questions
 
-This page addresses common questions about PhenoFetch and its usage.
+## How can I access the data?
 
-## General Questions
+There are three ways to access the data:
 
-### What is PhenoFetch?
+1. The web application for data visualization
+   [https://dri-apps.earthengine.app/view/bor-reservoir-evaporation](https://dri-apps.earthengine.app/view/bor-reservoir-evaporation)
 
-PhenoFetch is a command-line tool for downloading and analyzing PhenoCam data from NEON (National Ecological Observatory Network) sites. It simplifies the process of retrieving time-lapse images used for monitoring vegetation phenology.
+2. The API Playground for data inspection
+   [https://operevap.dri.edu](https://operevap.dri.edu)
 
-### Is PhenoFetch affiliated with NEON or the PhenoCam Network?
+3. The API for data access in production
+   [https://samapriya.github.io/over-evap/](https://samapriya.github.io/over-evap/) --> Change this link once it has moved to the proper location
 
-No, PhenoFetch is not officially affiliated with the National Ecological Observatory Network (NEON) or the PhenoCam Network. It is an independent tool developed to facilitate access to publicly available PhenoCam data.
+## How do I cite this dataset?
 
-### What license is PhenoFetch released under?
+### Data citation:
 
-PhenoFetch is released under the Apache License 2.0.
+- **COOL NAME HERE. (year). Desert Research Institute. Texas A&M, Virginia Tech University and Bureau of Reclamation. Accessed on (date). [http://COOLNAME](http://climateengine.org/) HERE.org. Version 2.1.**
 
-## Installation Questions
+### Related DLEM Scientific Publications:
 
-### What are the system requirements for PhenoFetch?
+Zhao, G., & Gao, H. (2019). Estimating reservoir evaporation losses for the United States: Fusing remote sensing and modeling approaches. *Remote Sensing of Environment*, *226*, 109-124.
 
-PhenoFetch requires:
-- Python 3.9 or higher
-- Internet connection to download data
-- Sufficient disk space for downloaded images
+Zhao, B., Huntington, J., Pearson, C., Zhao, G., Ott, T., Zhu, J., ... & Gao, H. (2024). Developing a general Daily Lake Evaporation Model and demonstrating its application in the state of Texas. *Water Resources Research*, *60*(3), e2023WR036181.
 
-### Why am I getting an error during installation?
+## How often is data updated?
 
-Common installation issues include:
-- Insufficient permissions (try using `pip install --user phenofetch`)
-- Outdated pip (try `pip install --upgrade pip` first)
-- Missing dependencies (ensure you have all required packages)
+The reservoir evaporation database is updated daily; however, the gridded weather forcing data is produced with a 2-day latency leading to a 3-day lag between today and current estimates. We are currently exploring alternative weather datasets to reduce the lag in evaporation estimates.
 
-### Can I use PhenoFetch on Windows/Mac/Linux?
+## My dataset shows negative evaporation rates?
 
-Yes, PhenoFetch is compatible with all major operating systems including Windows, macOS, and Linux.
+Negative evaporation (or condensation) occurs when the temperature of the water body falls below the dew point of the air above (cold water; moist air). Many models neglect to capture this process, but at certain reservoirs during certain time periods, condensation can account for a substantial portion of a reservoir's water balance. DLEM showed good agreement with negative evaporation estimates from Eddy Covariance at Lake Limestone, TX and other locations.
 
-## Usage Questions
+![Evaporation Graph](/media/image2.png)
 
-### What is a NEON site code?
+## Data I downloaded previously changed?
 
-A NEON site code is a unique identifier for each site in the National Ecological Observatory Network. Examples include "HARV" for Harvard Forest, "ABBY" for Abby Road, etc. You can see all available site codes using the `phenofetch sites` command.
+The input weather dataset used by DLEM provides provisional estimates for ~2 months to allow for review and updates. The reservoir evaporation database updates the last 2-months of data each day to incorporate changes in the forcing data and gather in-situ data that may not have been available during the initial model run. **Early, Provisional, and Final** **data flags are included with each daily estimate for tracking.**
 
-### What is a NEON product ID?
+## My reservoir shows static values for area, elevation, and volume?
 
-A NEON product ID identifies a specific data product. For PhenoCam images, the product ID is typically "DP1.00033".
+Area, elevation, and volume information is not available in real-time for all reservoirs. For static locations, we assume area, depth, and volume based on conditions at full storage. If you have area, elevation, and volume information you'd like incorporated, please contact our team @ XXXXXXX.
 
-### How much disk space will the downloaded data require?
+## Reservoir area, elevation, and volume values disagree with internal or operational estimates from my agency?
 
-The disk space required depends on the site and date range. Full-resolution images are typically 2-4 MB each, and there are usually 24-48 images per day. You can use the `estimate` command to calculate the expected download size before committing to a full download.
+Reservoir AEV information is collated from numerous online databases and resources (see sources documentation here). In many cases, reservoir Area-Elevation-Volume information is updated based and updated bathymetric survey data that may not align with historical estimates. For consistency amongst each evaporation timeseries, the XXXX workflow uses elevation combined with the latest available AEV curves to estimate volume and area. Stakeholders should use the best available judgement when applying estimates and may choose to overwrite area, elevation, and volume information as needed.
 
-### Are the downloaded images georeferenced?
+!!! note
+    Depths greater than 20 m are treated the same within the DLEM heat storage routine; however, depths less than 20 meters are considered and will influence evaporation estimates.
 
-PhenoCam images are not georeferenced in the traditional GIS sense. However, each site has fixed latitude and longitude coordinates which are available in the site metadata.
+## How can I obtain an API key?
 
-## Data Questions
+![image](images/api_page.png)
 
-### What types of files does PhenoFetch download?
+1. Go to [https://operevap.dri.edu](https://operevap.dri.edu)
+2. Click the down arrow by auth/request_key
+3. Click on "Try it out"
+4. Fill out the form
+5. Click 'Execute'
+6. Your API key will be issued within 24 hours via email
 
-PhenoFetch can download three types of files:
-- Full-resolution images (.jpg)
-- Thumbnail images (.jpg)
-- Metadata files (.meta)
+## What do the data flags mean?
 
-### What information is contained in the metadata files?
+If you run a data request with the option `also_return=qflag`, you will see a qflag property in the return. This property is data quality flag:
 
-Metadata files typically include:
-- Camera information
-- Capture time and conditions
-- Site information
-- Technical settings (exposure, white balance, etc.)
-
-### How frequently are images captured at NEON PhenoCam sites?
-
-Most NEON PhenoCam sites capture images every 30 minutes during daylight hours, but this can vary by site. Some sites may have more frequent or less frequent capture intervals.
-
-### What file organization should I expect in the downloaded data?
-
-Downloaded files are organized into three subdirectories:
-- `full_res/`: Contains full-resolution images
-- `thumbnails/`: Contains thumbnail images
-- `meta/`: Contains metadata files
-
-The original filenames are preserved.
-
-## Performance Questions
-
-### How can I speed up downloads?
-
-To speed up downloads:
-- Increase the batch size (`--batch-size` option)
-- Increase concurrency if you have a fast connection (`--concurrency` option)
-- Ensure you have a stable internet connection
-- Download smaller date ranges at a time
-
-### Why are my downloads slow or failing?
-
-Possible reasons include:
-- Slow or unstable internet connection
-- Server-side limitations
-- Too many concurrent connections
-- High server load
-
-Try reducing concurrency, using smaller batch sizes, or retrying during off-peak hours.
-
-### How does PhenoFetch determine the optimal concurrency?
-
-PhenoFetch automatically determines the optimal concurrency based on your system's CPU cores and available memory. This auto-tuning helps ensure efficient downloads without overwhelming your system or the server.
-
-## Troubleshooting
-
-### Error: "No data found for the specified date range"
-
-This error occurs when there are no PhenoCam images available for the site and date range you specified. Use the `stats` command to see what data is available for your site of interest.
-
-### Error: "Site code not found in available sites"
-
-This error means you've specified an invalid site code. Use the `phenofetch sites` command to see a list of all valid site codes.
-
-### Downloads start but then stall or time out
-
-If downloads stall:
-- Try increasing the timeout value (`--timeout` option)
-- Reduce concurrency (`--concurrency` option)
-- Try smaller batch sizes
-- Check your internet connection
-- Retry during off-peak hours
-
-### Some files failed to download
-
-Failed downloads are reported at the end of the process. Common causes include:
-- Temporary server issues
-- Network interruptions
-- Files that exist on the server index but aren't actually available
-
-You can retry the download for the same date range; PhenoFetch will skip files that were already successfully downloaded.
+- O: raw data value from data sites
+- M: data was not available for this date and is filled with previous date data value
+- S: data point is static
+- R: removed outlier data
