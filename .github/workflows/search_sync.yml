@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 0
           ref: gh-pages
 
-      - name: Download search.html
+      - name: Download playground.html
         run: |
           curl -o playground.html https://raw.githubusercontent.com/samapriya/evap-docs/refs/heads/main/playground.html
 
