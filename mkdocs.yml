@@ -150,7 +150,7 @@ nav:
   - Getting Started:
       - Overview: started/getting-started.md
       - Installation: started/authentication.md
-      - API Playground: https://operevap.launchpad.wiki/playground
+      - API Playground: https://operevap.dri.edu/docs
   - API Endpoints:
       - Info Endpoints: endpoints/info-endpoints.md
       - Metadata Endpoints: endpoints/metadata-endpoints.md
