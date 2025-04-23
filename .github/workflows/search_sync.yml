@@ -18,9 +18,9 @@ jobs:
     steps:
       - name: Wait for GitHub Pages
         run: |
-          # Wait for 2 minutes to allow GitHub Pages deployment to complete
+          # Wait for 1 minutes to allow GitHub Pages deployment to complete
           echo "Waiting for GitHub Pages deployment to complete..."
-          sleep 120
+          sleep 60
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -45,7 +45,7 @@ jobs:
 
       - name: Commit files to gh-pages
         run: |
-          git add search.html browse.html
+          git add playground.html
           git commit -m "Add playground.html from external source"
 
       - name: Push changes to gh-pages
