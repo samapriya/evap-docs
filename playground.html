@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpeREVAP Documentation</title>
+    <style>
+        :root {
+            /* Light theme variables */
+            --light-primary: #3f51b5;
+            /* indigo */
+            --light-accent: #3f51b5;
+            /* indigo */
+            --light-background: #ffffff;
+
+            /* Dark theme variables */
+            --dark-primary: #2196f3;
+            /* blue */
+            --dark-accent: #2196f3;
+            /* blue */
+            --dark-background: #121212;
+        }
+
+        /* Default to light theme */
+        body {
+            --primary: var(--light-primary);
+            --accent: var(--light-accent);
+            --background: var(--light-background);
+
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--background);
+            transition: all 0.3s ease;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* Override system preference - always use light theme by default */
+        body.dark-theme {
+            --primary: var(--dark-primary);
+            --accent: var(--dark-accent);
+            --background: var(--dark-background);
+        }
+
+        /* Full iframe styles */
+        .iframe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            overflow: hidden;
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Theme toggle button - minimal floating button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        /* Dark theme class (for toggle) */
+        body.dark-theme {
+            --primary: var(--dark-primary);
+            --accent: var(--dark-accent);
+            --background: var(--dark-background);
+        }
+
+        body.light-theme {
+            --primary: var(--light-primary);
+            --accent: var(--light-accent);
+            --background: var(--light-background);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="iframe-container">
+        <iframe src="https://operevap.dri.edu/docs" allowfullscreen></iframe>
+    </div>
+
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        🌙
+    </button>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+
+        // Check for saved user preference, default to light theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.body.classList.add(savedTheme);
+            updateThemeIcon(savedTheme === 'dark-theme');
+        } else {
+            // Explicitly set to light theme by default
+            document.body.classList.add('light-theme');
+            localStorage.setItem('theme', 'light-theme');
+            updateThemeIcon(false);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark-theme')) {
+                document.body.classList.remove('dark-theme');
+                document.body.classList.add('light-theme');
+                localStorage.setItem('theme', 'light-theme');
+                updateThemeIcon(false);
+            } else {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark-theme');
+                updateThemeIcon(true);
+            }
+        });
+
+        function updateThemeIcon(isDark) {
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+        }
+    </script>
+</body>
+
+</html>
