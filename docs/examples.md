@@ -1,8 +1,18 @@
 # Examples
 
 This section provides example code snippets for common tasks using the Reservoir Evaporation API.
+NOTE: R and cURL have not been tested yet!
 
 ## Setup
+### Set up a virtual environment
+    ```console
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install geopandas
+    pip install matplotlib
+    pip install pandas
+    pip install requests
+    ```
 
 === "Python"
 
@@ -14,7 +24,7 @@ This section provides example code snippets for common tasks using the Reservoir
 
     # API configuration
     API_KEY = "your_api_key_here"
-    BASE_URL = "https://api-url.example"  # Replace with the actual API base URL
+    BASE_URL = "https://operevap.dri.edu/"  # Replace with the actual API base URL
     HEADERS = {
         "api-key": API_KEY
     }
@@ -51,20 +61,22 @@ This section provides example code snippets for common tasks using the Reservoir
     def get_reservoirs():
         """Get a list of available reservoirs."""
         url = f"{BASE_URL}/info/list_RES_NAMES"
-        response = requests.get(url, headers=HEADERS)
+        response = requests.post(url, headers=HEADERS)
 
-        if response.status_code == 200:
-            return response.json()
+        if response.status_code == 200 and "RES_NAMES" in response.json().keys():
+            return response.json()["RES_NAMES]
         else:
             print(f"Error: {response.status_code}")
             return None
 
     # Example usage
     reservoirs = get_reservoirs()
-    print(f"Number of reservoirs: {len(reservoirs)}")
-    print("First 5 reservoirs:")
-    for res in reservoirs[:5]:
-        print(f"- {res}")
+    if reservoirs:
+        print(f"Number of reservoirs: {len(reservoirs)}")
+        print("First 5 reservoirs:")
+        for res in reservoirs[:5]:
+            print(f"- {res}")
+
     ```
 
 === "R"
@@ -96,7 +108,7 @@ This section provides example code snippets for common tasks using the Reservoir
 
     ```sh
     # Get a list of available reservoirs
-    curl -X GET "${BASE_URL}/info/list_RES_NAMES" \
+    curl -X POST "${BASE_URL}/info/list_RES_NAMES" \
          -H "api-key: ${API_KEY}" \
          -H "Content-Type: application/json"
     ```
@@ -125,10 +137,10 @@ This section provides example code snippets for common tasks using the Reservoir
     # Example usage
     reservoir_metadata = get_reservoir_metadata(["LAKE ALICE", "LAKE ESTES"])
     for res in reservoir_metadata:
-        print(f"Reservoir: {res['res_name']}")
-        print(f"  Latitude: {res['latitude']}")
-        print(f"  Longitude: {res['longitude']}")
-        print(f"  State: {res['state']}")
+        print(f"Reservoir: {res['RES_NAME']}")
+        print(f"  Latitude: {res['LAT']}")
+        print(f"  Longitude: {res['LON']}")
+        print(f"  State: {res['Shape_Area']}")
     ```
 
 === "R"
@@ -201,12 +213,12 @@ This section provides example code snippets for common tasks using the Reservoir
 
     # Convert to pandas DataFrame for analysis
     df = pd.DataFrame(data)
-    df['date'] = pd.to_datetime(df['date'])
-    df.set_index('date', inplace=True)
+    df['start_date'] = pd.to_datetime(df['start_date'])
+    df.set_index('start_date', inplace=True)
 
     # Plot the data
     plt.figure(figsize=(12, 6))
-    plt.plot(df.index, df['NetE'], label='Net Evaporation')
+    plt.plot(df.index, df['NetE (mm)'], label='Net Evaporation')
     plt.title('Net Evaporation for LAKE ALICE (2020)')
     plt.xlabel('Date')
     plt.ylabel('Net Evaporation (mm/day)')
@@ -247,10 +259,10 @@ This section provides example code snippets for common tasks using the Reservoir
 
     # Convert to data frame for analysis
     df <- as.data.frame(data)
-    df$date <- as.Date(df$date)
+    df$start_date <- as.Date(df$start_date)
 
     # Plot the data
-    ggplot(df, aes(x = date, y = NetE)) +
+    ggplot(df, aes(x = start_date, y = NetE (mm))) +
       geom_line() +
       labs(
         title = "Net Evaporation for LAKE ALICE (2020)",
@@ -304,10 +316,10 @@ This section provides example code snippets for common tasks using the Reservoir
 
     # Process and visualize data
     df = pd.DataFrame(comparison_data)
-    df['date'] = pd.to_datetime(df['date'])
+    df['start_date'] = pd.to_datetime(df['start_date'])
 
     # Pivot the data to have one column per reservoir
-    pivot_df = df.pivot_table(index='date', columns='res_name', values='NetE')
+    pivot_df = df.pivot_table(index='start_date', columns='RES_NAME', values='NetE (mm)')
 
     # Plot the data
     plt.figure(figsize=(12, 6))
@@ -326,7 +338,7 @@ This section provides example code snippets for common tasks using the Reservoir
 === "R"
 
     ```r
-    compare_reservoirs <- function(reservoir_names, start_date, end_date, variable = "NetE") {
+    compare_reservoirs <- function(reservoir_names, start_date, end_date, variable = "NetE (mm)") {
       # Compare a variable between multiple reservoirs
       url <- paste0(BASE_URL, "/timeseries/daily/reservoirs/daterange")
       params <- list(
@@ -355,22 +367,22 @@ This section provides example code snippets for common tasks using the Reservoir
 
     # Process and visualize data
     df <- as.data.frame(comparison_data)
-    df$date <- as.Date(df$date)
+    df$start_date <- as.Date(df$start_date)
 
     # Prepare data for plotting
     df_wide <- df %>%
       pivot_wider(
-        id_cols = date,
-        names_from = res_name,
-        values_from = NetE
+        id_cols = start_date,
+        names_from = RES_NAME,
+        values_from = NetE (mm)
       )
 
     # Reshape for ggplot
     df_long <- df %>%
-      select(date, res_name, NetE)
+      select(start_date, RES_NAME, NetE (mm))
 
     # Plot the data
-    ggplot(df_long, aes(x = date, y = NetE, color = res_name)) +
+    ggplot(df_long, aes(x = start_date, y = NetE (mm), color = RES_NAME)) +
       geom_line() +
       labs(
         title = "Net Evaporation Comparison (Summer 2020)",
@@ -420,8 +432,8 @@ This section provides example code snippets for common tasks using the Reservoir
         if response.status_code == 200:
             data = response.json()
             df = pd.DataFrame(data)
-            df['date'] = pd.to_datetime(df['date'])
-            df.set_index('date', inplace=True)
+            df['start_date'] = pd.to_datetime(df['start_date'])
+            df.set_index('start_date', inplace=True)
 
             # Calculate monthly totals
             monthly_data = df.resample('M').sum()
@@ -437,7 +449,7 @@ This section provides example code snippets for common tasks using the Reservoir
 
     # Plot monthly volumes
     plt.figure(figsize=(12, 6))
-    plt.bar(monthly_volumes.index, monthly_volumes['E_volume'])
+    plt.bar(monthly_volumes.index, monthly_volumes['E_volume (m3)'])
     plt.title('Monthly Evaporation Volumes for LAKE MEAD (2020)')
     plt.xlabel('Month')
     plt.ylabel('Evaporation Volume (cubic meters)')
@@ -470,13 +482,13 @@ This section provides example code snippets for common tasks using the Reservoir
       if (status_code(response) == 200) {
         data <- fromJSON(content(response, "text", encoding = "UTF-8"))
         df <- as.data.frame(data)
-        df$date <- as.Date(df$date)
+        df$start_date <- as.Date(df$start_date)
 
         # Calculate monthly totals
         monthly_data <- df %>%
-          mutate(month = format(date, "%b")) %>%
+          mutate(month = format(start_date, "%b")) %>%
           group_by(month) %>%
-          summarize(E_volume = sum(E_volume, na.rm = TRUE)) %>%
+          summarize(E_volume = sum(E_volume (m3), na.rm = TRUE)) %>%
           mutate(month = factor(month, levels = month.abb))
 
         return(monthly_data)
@@ -490,7 +502,7 @@ This section provides example code snippets for common tasks using the Reservoir
     monthly_volumes <- get_monthly_evaporation_volumes("LAKE MEAD", 2020)
 
     # Plot monthly volumes
-    ggplot(monthly_volumes, aes(x = month, y = E_volume)) +
+    ggplot(monthly_volumes, aes(x = month, y = E_volume (m3))) +
       geom_col(fill = "steelblue") +
       labs(
         title = "Monthly Evaporation Volumes for LAKE MEAD (2020)",
@@ -541,23 +553,23 @@ This section provides example code snippets for common tasks using the Reservoir
     # Example usage
     weather_data = get_weather_data("LAKE POWELL", "2020-06-01", "2020-08-31")
     df = pd.DataFrame(weather_data)
-    df['date'] = pd.to_datetime(df['date'])
-    df.set_index('date', inplace=True)
+    df['start_date'] = pd.to_datetime(df['start_date'])
+    df.set_index('start_date', inplace=True)
 
     # Calculate monthly averages
     monthly_weather = df.resample('M').agg({
-        'pr': 'sum',
-        'tmmx_c': 'mean',
-        'tmmn_c': 'mean',
-        'vpd_kpa': 'mean',
-        'srad': 'mean'
+        'pr (mm)': 'sum',
+        'tmmx_c (degC)': 'mean',
+        'tmmn_c (degC)': 'mean',
+        'vpd_kpa (kpa)': 'mean',
+        'srad (wm2)': 'mean'
     })
 
     print("Monthly Weather Summary for LAKE POWELL (Summer 2020):")
     print(f"Month | Total Precip (mm) | Avg Max Temp (°C) | Avg Min Temp (°C)")
     for idx, row in monthly_weather.iterrows():
         month = idx.strftime('%b %Y')
-        print(f"{month} | {row['pr']:.1f} | {row['tmmx_c']:.1f} | {row['tmmn_c']:.1f}")
+        print(f"{month} | {row['pr (mm)']:.1f} | {row['tmmx_c (degC)']:.1f} | {row['tmmn_c (degC)']:.1f}")
     ```
 
 === "R"
@@ -589,18 +601,18 @@ This section provides example code snippets for common tasks using the Reservoir
     # Example usage
     weather_data <- get_weather_data("LAKE POWELL", "2020-06-01", "2020-08-31")
     df <- as.data.frame(weather_data)
-    df$date <- as.Date(df$date)
+    df$start_date <- as.Date(df$start_date)
 
     # Calculate monthly averages
     monthly_weather <- df %>%
-      mutate(month = format(date, "%b %Y")) %>%
+      mutate(month = format(start_date, "%b %Y")) %>%
       group_by(month) %>%
       summarize(
-        pr_total = sum(pr, na.rm = TRUE),
-        tmmx_c_avg = mean(tmmx_c, na.rm = TRUE),
-        tmmn_c_avg = mean(tmmn_c, na.rm = TRUE),
-        vpd_kpa_avg = mean(vpd_kpa, na.rm = TRUE),
-        srad_avg = mean(srad, na.rm = TRUE)
+        pr_total = sum(pr (mm), na.rm = TRUE),
+        tmmx_c_avg = mean(tmmx_c (degC), na.rm = TRUE),
+        tmmn_c_avg = mean(tmmn_c (degC), na.rm = TRUE),
+        vpd_kpa_avg = mean(vpd_kpa (kpa), na.rm = TRUE),
+        srad_avg = mean(srad (wm2), na.rm = TRUE)
       )
 
     # Print monthly summary
@@ -666,11 +678,11 @@ This section provides example code snippets for common tasks using the Reservoir
             weather_data = pd.DataFrame(weather_response.json())
 
             # Prepare data
-            evap_data['date'] = pd.to_datetime(evap_data['date'])
-            evap_data.set_index(['date', 'res_name'], inplace=True)
+            evap_data['start_date'] = pd.to_datetime(evap_data['start_date'])
+            evap_data.set_index(['start_date', 'RES_NAME'], inplace=True)
 
-            weather_data['date'] = pd.to_datetime(weather_data['date'])
-            weather_data.set_index(['date', 'res_name'], inplace=True)
+            weather_data['date'] = pd.to_datetime(weather_data['start_date'])
+            weather_data.set_index(['start_date', 'RES_NAME'], inplace=True)
 
             # Merge datasets
             combined_data = pd.merge(evap_data, weather_data, left_index=True, right_index=True)
@@ -685,13 +697,13 @@ This section provides example code snippets for common tasks using the Reservoir
     combined_data.reset_index(inplace=True)
 
     # Calculate correlation between variables
-    correlation = combined_data[['NetE', 'tmmx_c', 'vpd_kpa', 'srad']].corr()
+    correlation = combined_data[['NetE (mm)', 'tmmx_c (degC)', 'vpd_kpa (kpa)', 'srad (wm2)']].corr()
     print("Correlation Matrix:")
     print(correlation)
 
     # Plot relationship between temperature and evaporation
     plt.figure(figsize=(10, 6))
-    plt.scatter(combined_data['tmmx_c'], combined_data['NetE'])
+    plt.scatter(combined_data['tmmx_c (degC)'], combined_data['NetE (mm)'])
     plt.title('Relationship Between Maximum Temperature and Net Evaporation')
     plt.xlabel('Maximum Temperature (°C)')
     plt.ylabel('Net Evaporation (mm/day)')
@@ -739,14 +751,14 @@ This section provides example code snippets for common tasks using the Reservoir
         weather_data <- as.data.frame(fromJSON(content(weather_response, "text", encoding = "UTF-8")))
 
         # Prepare data
-        evap_data$date <- as.Date(evap_data$date)
-        weather_data$date <- as.Date(weather_data$date)
+        evap_data$start_date <- as.Date(evap_data$start_date)
+        weather_data$start_date <- as.Date(weather_data$start_date)
 
         # Merge datasets
         combined_data <- inner_join(
           evap_data,
           weather_data,
-          by = c("date", "res_name")
+          by = c("start_date", "RES_NAME")
         )
 
         return(combined_data)
@@ -759,14 +771,14 @@ This section provides example code snippets for common tasks using the Reservoir
     # Example usage
     combined_data <- combine_datasets("LAKE MEAD", "2020-06-01", "2020-08-31")
 
-    # Calculate correlation between variables
-    correlation <- cor(combined_data[, c("NetE", "tmmx_c", "vpd_kpa", "srad")],
+    # Calculate the correlation between variables
+    correlation <- cor(combined_data[, c("NetE (mm)", "tmmx_c (degC)", "vpd_kpa (kpa)", "srad (wm2)")],
                        use = "complete.obs")
     cat("Correlation Matrix:\n")
     print(correlation)
 
-    # Plot relationship between temperature and evaporation
-    ggplot(combined_data, aes(x = tmmx_c, y = NetE)) +
+    # Plot the relationship between temperature and evaporation
+    ggplot(combined_data, aes(x = tmmx_c (degC), y = NetE (mm))) +
       geom_point() +
       geom_smooth(method = "lm", se = TRUE, color = "blue") +
       labs(
@@ -873,8 +885,9 @@ This section provides example code snippets for common tasks using the Reservoir
          -H "api-key: ${API_KEY}" > colorado_river_basin_evaporation_2020.csv
     ```
 
-## Working with Station Data
 
+<!--
+## Working with Station Data
 === "Python"
 
     ```python
@@ -1012,7 +1025,7 @@ This section provides example code snippets for common tasks using the Reservoir
             "date": date,
             "units": "metric",
             "output_format": "json",
-            "also_return": "latitude,longitude"
+            "also_return": "LAT,LON"
         }
 
         response = requests.get(url, headers=HEADERS, params=params)
@@ -1024,7 +1037,7 @@ This section provides example code snippets for common tasks using the Reservoir
             # Create GeoDataFrame
             gdf = gpd.GeoDataFrame(
                 df,
-                geometry=gpd.points_from_xy(df.longitude, df.latitude),
+                geometry=gpd.points_from_xy(df.LON, df.LAT),
                 crs="EPSG:4326"
             )
 
@@ -1044,7 +1057,7 @@ This section provides example code snippets for common tasks using the Reservoir
             scatter = ax.scatter(
                 gdf.geometry.x,
                 gdf.geometry.y,
-                c=gdf['NetE'],
+                c=gdf['NetE (mm)'],
                 cmap='YlOrRd',
                 s=50,
                 alpha=0.7,
@@ -1052,7 +1065,7 @@ This section provides example code snippets for common tasks using the Reservoir
             )
 
             # Add colorbar
-            norm = Normalize(vmin=gdf['NetE'].min(), vmax=gdf['NetE'].max())
+            norm = Normalize(vmin=gdf['NetE (mm)'].min(), vmax=gdf['NetE (mm)'].max())
             sm = ScalarMappable(norm=norm, cmap='YlOrRd')
             sm.set_array([])
             cbar = fig.colorbar(sm, ax=ax)
@@ -1092,7 +1105,7 @@ This section provides example code snippets for common tasks using the Reservoir
         date = date,
         units = "metric",
         output_format = "json",
-        also_return = "latitude,longitude"
+        also_return = "LAT,LON"
       )
 
       response <- GET(url, HEADERS, query = params)
@@ -1102,7 +1115,7 @@ This section provides example code snippets for common tasks using the Reservoir
         df <- as.data.frame(data)
 
         # Create spatial data
-        gdf <- st_as_sf(df, coords = c("longitude", "latitude"), crs = 4326)
+        gdf <- st_as_sf(df, coords = c("LON", "LAT"), crs = 4326)
 
         # Get US states outline (requires having US state boundaries loaded)
         # For this example, assuming 'us_states' is available or could be loaded from a package
@@ -1123,7 +1136,7 @@ This section provides example code snippets for common tasks using the Reservoir
         # the actual western_states_geo spatial data
         ggplot() +
           # geom_sf(data = western_states_geo, fill = NA, color = "gray") +
-          geom_sf(data = gdf, aes(color = NetE), size = 3) +
+          geom_sf(data = gdf, aes(color = NetE (mm)), size = 3) +
           scale_color_viridis(option = "plasma", name = "Net Evaporation\n(mm/day)") +
           labs(
             title = paste("Reservoir Net Evaporation on", date),
@@ -1155,5 +1168,5 @@ This section provides example code snippets for common tasks using the Reservoir
     curl -X GET "${BASE_URL}/timeseries/daily/reservoirs/date?datasets=nete-volume-calcs&variables=NetE&date=2020-07-15&units=metric&output_format=json&also_return=latitude,longitude" \
          -H "api-key: ${API_KEY}"
     ```
-
+-->
 These examples demonstrate common use cases for the Reservoir Evaporation API and provide a starting point for your own analysis. You can modify and extend these examples to suit your specific needs.
