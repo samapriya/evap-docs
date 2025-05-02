@@ -66,7 +66,7 @@ To obtain an API key, you need to make a request to the authentication endpoint:
 
 ### Response
 
-After submitting your request, you should receive an email with your API key within 24 hours.
+After submitting your request, you should receive an email with your API key within 1 to 2 business days.
 
 ## Using Your API Key
 
