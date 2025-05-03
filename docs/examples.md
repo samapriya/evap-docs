@@ -2,6 +2,8 @@
 
 This section provides example code snippets for common tasks using the Reservoir Evaporation API.
 
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/samapriya/evap-docs/blob/main/docs/notebooks/examples.ipynb)
+
 ## Setup
 ### Set up a virtual environment
 
