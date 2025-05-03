@@ -25,33 +25,6 @@ Retrieves metadata for one or more reservoirs.
     print(data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get reservoir metadata
-    url <- paste0(base_url, "/metadata/reservoirs")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        RES_NAMES = "LAKE ALICE,LAKE ESTES",
-        output_format = "json"
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-    ```
-
 === "cURL"
 
     ```sh
@@ -104,33 +77,6 @@ Retrieves metadata for one or more stations.
 
     response = requests.get(url, headers=headers, params=params)
     data = response.json()
-    print(data)
-    ```
-
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get station metadata
-    url <- paste0(base_url, "/metadata/stations")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        STA_NAMES = "ABERDEEN_STATION,ABIQUIU DAM_STATION",
-        output_format = "json"
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
     print(data)
     ```
 
@@ -193,39 +139,6 @@ The metadata attributes can be included in timeseries responses by using the `al
 
     response = requests.get(url, headers=headers, params=params)
     data = response.json()
-    print(data)
-    ```
-
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get timeseries data with metadata attributes
-    url <- paste0(base_url, "/timeseries/daily/reservoirs/daterange")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        RES_NAMES = "LAKE ALICE",
-        datasets = "nete-volume-calcs",
-        variables = "NetE,E_volume",
-        start_date = "2020-01-01",
-        end_date = "2020-01-31",
-        units = "metric",
-        also_return = "qflag",
-        output_format = "json"
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
     print(data)
     ```
 

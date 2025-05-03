@@ -24,30 +24,6 @@ Lists all available datasets in the API.
     print(data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get available datasets
-    url <- paste0(base_url, "/info/list_datasets")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(output_format = "json")
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-    ```
-
 === "cURL"
 
     ```sh
@@ -89,33 +65,6 @@ Lists available variables for a specified dataset.
 
     response = requests.get(url, headers=headers, params=params)
     data = response.json()
-    print(data)
-    ```
-
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get available variables for a dataset
-    url <- paste0(base_url, "/info/list_variables")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        output_format = "json",
-        dataset = "nete-volume-calcs"
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
     print(data)
     ```
 
@@ -162,34 +111,6 @@ Lists the minimum and maximum dates available for a dataset and variable.
 
     response = requests.get(url, headers=headers, params=params)
     data = response.json()
-    print(data)
-    ```
-
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get date range for a dataset and variable
-    url <- paste0(base_url, "/info/list_dates")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        output_format = "json",
-        dataset = "nete-volume-calcs",
-        variable = "NetE"
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
     print(data)
     ```
 
@@ -248,48 +169,6 @@ Lists available reservoir IDs (RES_NAME) that can be used in other API requests.
 
     response = requests.post(url, headers=headers, params=params, files=files)
     data = response.json()
-    print(data)
-    ```
-
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get reservoir names without shapefile
-    url <- paste0(base_url, "/info/list_RES_NAMES")
-
-    response <- POST(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(output_format = "json")
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-
-    # With shapefile (if needed)
-    response <- POST(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(output_format = "json"),
-      body = list(
-        shapefile_shp = upload_file("your_shapefile.shp"),
-        shapefile_dbf = upload_file("your_shapefile.dbf"),
-        shapefile_prj = upload_file("your_shapefile.prj"),
-        shapefile_shx = upload_file("your_shapefile.shx")
-      ),
-      encode = "multipart"
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
     print(data)
     ```
 
@@ -365,48 +244,6 @@ Lists available station IDs (STA_NAME) that can be used in other API requests.
     print(data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get station names without shapefile
-    url <- paste0(base_url, "/info/list_STA_NAMES")
-
-    response <- POST(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(output_format = "json")
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-
-    # With shapefile (if needed)
-    response <- POST(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(output_format = "json"),
-      body = list(
-        shapefile_shp = upload_file("your_shapefile.shp"),
-        shapefile_dbf = upload_file("your_shapefile.dbf"),
-        shapefile_prj = upload_file("your_shapefile.prj"),
-        shapefile_shx = upload_file("your_shapefile.shx")
-      ),
-      encode = "multipart"
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-    ```
-
 === "cURL"
 
     ```sh
@@ -467,33 +304,6 @@ Lists available variables for stations.
     print(data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get station variables
-    url <- paste0(base_url, "/info/list_stations_variables")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        output_format = "json",
-        STA_NAMES = "ALL_STATIONS"  # or comma-separated list of station names
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-    ```
-
 === "cURL"
 
     ```sh
@@ -536,33 +346,6 @@ Lists the minimum and maximum dates available for stations in the database.
 
     response = requests.get(url, headers=headers, params=params)
     data = response.json()
-    print(data)
-    ```
-
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get station date range
-    url <- paste0(base_url, "/info/list_stations_dates")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        output_format = "json",
-        STA_NAMES = "ALL_STATIONS"  # or comma-separated list of station names
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
     print(data)
     ```
 

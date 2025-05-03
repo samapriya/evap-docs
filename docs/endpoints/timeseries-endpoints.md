@@ -35,38 +35,6 @@ Retrieves timeseries data for one or more reservoirs over a specified date range
     print(data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get reservoir timeseries data
-    url <- paste0(base_url, "/timeseries/daily/reservoirs/daterange")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        RES_NAMES = "LAKE ALICE",
-        datasets = "nete-volume-calcs",
-        variables = "NetE,E_volume",
-        start_date = "2020-01-01",
-        end_date = "2020-01-31",
-        units = "metric",
-        output_format = "json"
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-    ```
-
 === "cURL"
 
     ```sh
@@ -127,36 +95,6 @@ Retrieves timeseries data for all reservoirs on a single date.
     print(data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get reservoir data for a single date
-    url <- paste0(base_url, "/timeseries/daily/reservoirs/date")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        datasets = "nete-volume-calcs",
-        variables = "NetE,E_volume",
-        date = "2020-01-01",
-        units = "metric",
-        output_format = "json"
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-    ```
-
 === "cURL"
 
     ```sh
@@ -210,37 +148,6 @@ Retrieves timeseries data for one or more stations over a specified date range.
     print(data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get station timeseries data
-    url <- paste0(base_url, "/timeseries/stations/daterange")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        STA_NAMES = "LAKE MEAD_STATION",
-        variables = "ATemp,RH",
-        start_date = "2020-01-01",
-        end_date = "2020-01-31",
-        units = "metric",
-        output_format = "json"
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-    ```
-
 === "cURL"
 
     ```sh
@@ -258,6 +165,14 @@ Retrieves timeseries data for one or more stations over a specified date range.
 | ------------- | ------ | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | STA_NAMES     | string | One or more station names (comma-separated)           | LAKE MEAD_STATION, BLW_STATION                                                                                                                                                                                                                                                                                  |
 | variables     | string | One or more variables (comma-separated)               | ATemp, ATemp_Min, ATemp_Max, BP, BR, Ce, DO, DO_percent, EnergyT, ETo, ETr, evap_1, evap_2, evap_3, evap_4, evap_5, HSEnergyFlux, IncomingSR, inflow, SurfaceT, MO_StabilityL, NC_EnergyStored, NR, NW_AdvectedE, outflow, PH, RH, SamplingD, SkinTemp, SpecConduct, SWin, VP, VPD, WTemp, WVD, WD, WS, PofDays |
+| units         | string | Units for returned data (english or metric)           | metric                                                                                                                                                                                                                                                                                                          |
+| date          | string | Date (yyyy-mm-dd)                                     | 2020-01-01                                                                                                                                                                                                                                                                                                      |
+| also_return   | string | Additional metadata attributes to include in response |                                                                                                                                                                                                                                                                                                                 |
+| output_format | string | Response format (json or csv)                         | json                                                                                                                                                                                                                                                                                                            |
+
+### Response
+
+Returns a list of dictionaries containing timeseries data for all stations for the specified variables and date., WD, WS, PofDays |
 | units         | string | Units for returned data (english or metric)           | metric                                                                                                                                                                                                                                                                                                          |
 | start_date    | string | Start date (yyyy-mm-dd)                               | 2020-01-01                                                                                                                                                                                                                                                                                                      |
 | end_date      | string | End date (yyyy-mm-dd)                                 | 2020-01-31                                                                                                                                                                                                                                                                                                      |
@@ -299,35 +214,6 @@ Retrieves timeseries data for all stations on a single date.
     print(data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    api_key <- "YOUR_API_KEY"
-    base_url <- "https://operevap.dri.edu"
-
-    # Get station data for a single date
-    url <- paste0(base_url, "/timeseries/stations/date")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(
-        variables = "ATemp,RH",
-        date = "2020-01-01",
-        units = "metric",
-        output_format = "json"
-      )
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-    ```
-
 === "cURL"
 
     ```sh
@@ -343,12 +229,4 @@ Retrieves timeseries data for all stations on a single date.
 
 | Parameter     | Type   | Description                                           | Default                                                                                                                                                                                                                                                                                                         |
 | ------------- | ------ | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| variables     | string | One or more variables (comma-separated)               | ATemp, ATemp_Min, ATemp_Max, BP, BR, Ce, DO, DO_percent, EnergyT, ETo, ETr, evap_1, evap_2, evap_3, evap_4, evap_5, HSEnergyFlux, IncomingSR, inflow, SurfaceT, MO_StabilityL, NC_EnergyStored, NR, NW_AdvectedE, outflow, PH, RH, SamplingD, SkinTemp, SpecConduct, SWin, VP, VPD, WTemp, WVD, WD, WS, PofDays |
-| units         | string | Units for returned data (english or metric)           | metric                                                                                                                                                                                                                                                                                                          |
-| date          | string | Date (yyyy-mm-dd)                                     | 2020-01-01                                                                                                                                                                                                                                                                                                      |
-| also_return   | string | Additional metadata attributes to include in response |                                                                                                                                                                                                                                                                                                                 |
-| output_format | string | Response format (json or csv)                         | json                                                                                                                                                                                                                                                                                                            |
-
-### Response
-
-Returns a list of dictionaries containing timeseries data for all stations for the specified variables and date.
+| variables     | string | One or more variables (comma-separated)               | ATemp, ATemp_Min, ATemp_Max, BP, BR, Ce, DO, DO_percent, EnergyT, ETo, ETr, evap_1, evap_2, evap_3, evap_4, evap_5, HSEnergyFlux, IncomingSR, inflow, SurfaceT, MO_StabilityL, NC_EnergyStored, NR, NW_AdvectedE, outflow, PH, RH, SamplingD, SkinTemp, SpecConduct, SWin, VP, VPD, WTemp, WVD
