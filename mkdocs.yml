@@ -90,6 +90,7 @@ plugins:
       type: timeago
   - minify:
       minify_html: true
+  - open-in-new-tab
 
 # Extensions
 markdown_extensions:

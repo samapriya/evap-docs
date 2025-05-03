@@ -7,7 +7,6 @@ on:
 
 jobs:
   deploy:
-    #if: github.actor == 'samapriya'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -25,6 +24,7 @@ jobs:
             "mkdocs-material" \
             "cairosvg>=2.5" \
             "mkdocs-git-committers-plugin-2>=1.1.1" \
+            "mkdocs-open-in-new-tab" \
             "mkdocs-git-revision-date-localized-plugin>=1.0" \
             "mkdocs-git-authors-plugin" \
             "mkdocs-minify-plugin>=0.3" \
