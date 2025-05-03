@@ -5,7 +5,7 @@ NOTE: R and cURL have not been tested yet!
 
 ## Setup
 ### Set up a virtual environment
-    ```console
+    ```bash
     python3 -m venv venv
     source venv/bin/activate
     pip install geopandas
