@@ -4,7 +4,7 @@ The Reservoir Evaporation API integrates daily gridded weather and reservoir pro
 
 <center>
 
-<img src="images/methods_flowchart.png" alt="OperEvap Methods" width="800">
+<img src="https://picsur.spatialbytes.work/i/b77c0887-802d-4a3f-bda5-a5ed7d0b204c.jpg" alt="OperEvap Methods" width="600">
 
 </center>
 
