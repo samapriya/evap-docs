@@ -1,8 +1,10 @@
 # Reservoir Evaporation API Documentation
 
+Beta Status: This website is currently under development and may have some limitations or issues. Evaporation data should be considered provisional and not used for operational support or decision making. A production version of this API and database is scheduled to launch late summer 2025. 
+
 ## Overview
 
-The Reservoir Evaporation API provides public access to historical and near-real-time daily evaporation estimates from Bureau of Reclamation reservoirs located across 17 western states.
+The BOR Reservoir Evaporation API provides public access to historical, and near-real-time daily evaporation estimates for 247 Bureau of Reclamation reservoirs located across the 17 western states. Reservoir evaporation estimates are generated using the Texas A&M Daily Lake Evaporation Model (DLEM) (Zhao and Gao, 2019; Zhao et al., 2023). 
 
 This API delivers high-quality data records of evaporation rates and volumes for major reservoirs. The evaporation estimates incorporate meteorological forcing data and reservoir storage information to provide the best available estimates of reservoir evaporation.
 
@@ -14,19 +16,28 @@ Historically, water management agencies such as the Bureau of Reclamation (Recla
 
 This project developed a daily reservoir evaporation database which can be freely accessed and visualized by water managers and stakeholders. This database contains historical and near real-time, high quality data records of evaporation rates and volumes for major reservoirs.
 
+Data can be accessed interactively via the web interface at:
+* [https://dri-apps.earthengine.app/view/bor-reservoir-evaporation](https://dri-apps.earthengine.app/view/bor-reservoir-evaporation)
+
+Or programmatically through the API at:
+* [https://operevap.dri.edu/docs](https://operevap.dri.edu/docs)
+
+See the [Getting Started](https://operevap.launchpad.wiki/started/getting-started/) section for help with the API.
+
+
 ## Collaborative Development
 
-This API was collaboratively developed by the Bureau of Reclamation (BOR) and Desert Research Institute.
+This dataset and API was collaboratively developed by the Reclamation, Desert Research Institute, Texas A&M University, Virginia Tech University, and NASA. 
 
 <center>
 
-<img src="images/evap_api.png" alt="Image Description"  width="800">
+<img src="images/combined_logos.jpg" alt="Image Description"  width="800">
 
 </center>
 
 ## Disclaimer
 
-Data and information provided through this application are part of an active research project and should be considered provisional and subject to change. Users should perform thorough review prior to operational application and decision making.
+Data and information provided through this application are part of an active research project and should be considered provisional and subject to change. A production version of this API and database is scheduled to launch late summer 2025. Users should perform thorough review prior to operational application and decision making..
 
 ## Additional Resources
 

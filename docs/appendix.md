@@ -19,6 +19,8 @@ The following variables are available for reservoirs across different datasets:
 | sph_kgkg | Specific humidity | kg/kg | kg/kg |
 | pres_pa | Air pressure | Pa | Pa |
 
+*Pre-2016 weather data is derived from the hybrid RTMA-gridMET dataset. See the [Methods](https://operevap.launchpad.wiki/methods/) section for additional details.
+
 #### RES Dataset (Reservoir Physical Variables)
 | Variable | Description | Units (Metric) | Units (English) |
 |----------|-------------|----------------|-----------------|
@@ -26,7 +28,7 @@ The following variables are available for reservoirs across different datasets:
 | area_m2 | Surface area | m² | acre |
 | depth_m | Average depth | m | ft |
 
-#### LEM Dataset (Energy Balance Variables)
+#### LEM Dataset (DLEM Evaporation and Heat Stoarge Variables)
 | Variable | Description | Units (Metric) | Units (English) |
 |----------|-------------|----------------|-----------------|
 | E_hs | Heat storage evaporation | mm/day | in/day |
@@ -37,57 +39,12 @@ The following variables are available for reservoirs across different datasets:
 | Fetch | Fetch | m | ft |
 | Lerr | Latent heat of evaporation | W/m² | W/m² |
 
-#### NETE-VOLUME-CALCS Dataset (Evaporation Variables)
+#### NETE-VOLUME-CALCS Dataset (Net Evaporation and Evaporation Volume Variables)
 | Variable | Description | Units (Metric) | Units (English) |
 |----------|-------------|----------------|-----------------|
 | NetE | Net evaporation | mm/day | in/day |
 | E_volume | Evaporation volume | m³ | acre-ft |
 | NetE_volume | Net evaporation volume | m³ | acre-ft |
-
-### Station Variables
-
-The following variables are available for stations:
-
-| Variable | Description | Units (Metric) | Units (English) |
-|----------|-------------|----------------|-----------------|
-| ATemp | Air temperature | °C | °F |
-| ATemp_Min | Minimum air temperature | °C | °F |
-| ATemp_Max | Maximum air temperature | °C | °F |
-| BP | Barometric pressure | hPa | inHg |
-| BR | Bowen ratio | unitless | unitless |
-| Ce | Bulk transfer coefficient | unitless | unitless |
-| DO | Dissolved oxygen | mg/L | mg/L |
-| DO_percent | Dissolved oxygen percentage | % | % |
-| EnergyT | Energy balance term | W/m² | W/m² |
-| ETo | Reference evapotranspiration (grass) | mm/day | in/day |
-| ETr | Reference evapotranspiration (alfalfa) | mm/day | in/day |
-| evap_1 | Evaporation method 1 | mm/day | in/day |
-| evap_2 | Evaporation method 2 | mm/day | in/day |
-| evap_3 | Evaporation method 3 | mm/day | in/day |
-| evap_4 | Evaporation method 4 | mm/day | in/day |
-| evap_5 | Evaporation method 5 | mm/day | in/day |
-| HSEnergyFlux | Heat storage energy flux | W/m² | W/m² |
-| IncomingSR | Incoming solar radiation | W/m² | W/m² |
-| inflow | Inflow | m³/s | cfs |
-| SurfaceT | Surface temperature | °C | °F |
-| MO_StabilityL | Monin-Obukhov stability length | m | ft |
-| NC_EnergyStored | Net change in energy stored | W/m² | W/m² |
-| NR | Net radiation | W/m² | W/m² |
-| NW_AdvectedE | Net advected energy | W/m² | W/m² |
-| outflow | Outflow | m³/s | cfs |
-| PH | pH | unitless | unitless |
-| RH | Relative humidity | % | % |
-| SamplingD | Sampling depth | m | ft |
-| SkinTemp | Skin temperature | °C | °F |
-| SpecConduct | Specific conductance | μS/cm | μS/cm |
-| SWin | Incoming shortwave radiation | W/m² | W/m² |
-| VP | Vapor pressure | kPa | kPa |
-| VPD | Vapor pressure deficit | kPa | kPa |
-| WTemp | Water temperature | °C | °F |
-| WVD | Wind vector direction | degrees | degrees |
-| WD | Wind direction | degrees | degrees |
-| WS | Wind speed | m/s | mph |
-| PofDays | Percentage of days with data | % | % |
 
 ## HTTP Status Codes
 

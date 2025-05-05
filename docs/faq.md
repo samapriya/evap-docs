@@ -17,7 +17,7 @@ There are three ways to access the data:
 
 ### Data citation:
 
-- **COOL NAME HERE. (year). Desert Research Institute. Texas A&M, Virginia Tech University and Bureau of Reclamation. Accessed on (date). [http://COOLNAME](http://climateengine.org/) HERE.org. Version 2.1.**
+Beta Status: This website is currently under development and may have some limitations or issues. Evaporation data should be considered provisional and not used for operational support or decision making. A production version of this API and database is scheduled to launch late summer 2025. 
 
 ### Related DLEM Scientific Publications:
 
@@ -33,7 +33,11 @@ The reservoir evaporation database is updated daily; however, the gridded weathe
 
 Negative evaporation (or condensation) occurs when the temperature of the water body falls below the dew point of the air above (cold water; moist air). Many models neglect to capture this process, but at certain reservoirs during certain time periods, condensation can account for a substantial portion of a reservoir's water balance. DLEM showed good agreement with negative evaporation estimates from Eddy Covariance at Lake Limestone, TX and other locations.
 
-![Evaporation Graph](/media/image2.png)
+<center>
+
+<img src="images/limestone_evap_timeseries.jpg" alt="Image Description"  width="800">
+
+</center>
 
 ## Data I downloaded previously changed?
 
@@ -41,7 +45,7 @@ The input weather dataset used by DLEM provides provisional estimates for ~2 mon
 
 ## My reservoir shows static values for area, elevation, and volume?
 
-Area, elevation, and volume information is not available in real-time for all reservoirs. For static locations, we assume area, depth, and volume based on conditions at full storage. If you have area, elevation, and volume information you'd like incorporated, please contact our team @ XXXXXXX.
+Area, elevation, and volume information is not available in real-time for all reservoirs. For static locations, we assume area, depth, and volume based on conditions at full storage. If you have area, elevation, and volume information you'd like incorporated, please contact our team.
 
 ## Reservoir area, elevation, and volume values disagree with internal or operational estimates from my agency?
 
