@@ -51,7 +51,7 @@ pip install requests
         response = requests.post(url, headers=HEADERS)
 
         if response.status_code == 200 and "RES_NAMES" in response.json().keys():
-            return response.json()["RES_NAMES]
+            return response.json()["RES_NAMES"]
         else:
             print(f"Error: {response.status_code}")
             return None
@@ -256,7 +256,7 @@ pip install requests
             df.set_index('start_date', inplace=True)
 
             # Calculate monthly totals
-            monthly_data = df.resample('M').sum()
+            monthly_data = df.resample('MS').sum()
             monthly_data.index = monthly_data.index.strftime('%b')
 
             return monthly_data
@@ -319,7 +319,7 @@ pip install requests
     df.set_index('start_date', inplace=True)
 
     # Calculate monthly averages
-    monthly_weather = df.resample('M').agg({
+    monthly_weather = df.resample('MS').agg({
         'pr (mm)': 'sum',
         'tmmx_c (degC)': 'mean',
         'tmmn_c (degC)': 'mean',
@@ -356,7 +356,7 @@ pip install requests
         evap_params = {
             "RES_NAMES": reservoir_name,
             "datasets": "nete-volume-calcs",
-            "variables": "NetE,E_volume",
+            "variables": "NetE",
             "start_date": start_date,
             "end_date": end_date,
             "units": "metric",
@@ -370,7 +370,7 @@ pip install requests
         weather_params = {
             "RES_NAMES": reservoir_name,
             "datasets": "rtma",
-            "variables": "pr,tmmx_c,tmmn_c,vpd_kpa,srad",
+            "variables": "tmmx_c",
             "start_date": start_date,
             "end_date": end_date,
             "units": "metric",
@@ -384,11 +384,11 @@ pip install requests
             weather_data = pd.DataFrame(weather_response.json())
 
             # Prepare data
-            evap_data['start_date'] = pd.to_datetime(evap_data['start_date'])
-            evap_data.set_index(['start_date', 'RES_NAME'], inplace=True)
+            evap_data['date'] = pd.to_datetime(evap_data['start_date']).dt.strftime('%Y-%m-%d')
+            evap_data.set_index(['date', 'RES_NAME'], inplace=True)
 
-            weather_data['date'] = pd.to_datetime(weather_data['start_date'])
-            weather_data.set_index(['start_date', 'RES_NAME'], inplace=True)
+            weather_data['date'] = pd.to_datetime(weather_data['start_date']).dt.strftime('%Y-%m-%d')
+            weather_data.set_index(['date', 'RES_NAME'], inplace=True)
 
             # Merge datasets
             combined_data = pd.merge(evap_data, weather_data, left_index=True, right_index=True)
@@ -401,9 +401,10 @@ pip install requests
     # Example usage
     combined_data = combine_datasets("LAKE MEAD", "2020-06-01", "2020-08-31")
     combined_data.reset_index(inplace=True)
+    combined_data = combined_data[['tmmx_c (degC)', 'NetE (mm)']]
 
     # Calculate correlation between variables
-    correlation = combined_data[['NetE (mm)', 'tmmx_c (degC)', 'vpd_kpa (kpa)', 'srad (wm2)']].corr()
+    correlation = combined_data.corr()
     print("Correlation Matrix:")
     print(correlation)
 
