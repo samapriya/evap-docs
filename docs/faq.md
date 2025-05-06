@@ -10,8 +10,6 @@ There are three ways to access the data:
 2. The API Playground for data inspection
    [https://operevap.dri.edu](https://operevap.dri.edu)
 
-3. The API for data access in production
-   [https://samapriya.github.io/over-evap/](https://samapriya.github.io/over-evap/) --> Change this link once it has moved to the proper location
 
 ## How do I cite this dataset?
 
