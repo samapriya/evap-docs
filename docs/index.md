@@ -17,10 +17,10 @@ Historically, water management agencies such as the Bureau of Reclamation (Recla
 This project developed a daily reservoir evaporation database which can be freely accessed and visualized by water managers and stakeholders. This database contains historical and near real-time, high quality data records of evaporation rates and volumes for major reservoirs.
 
 Data can be accessed interactively via the web interface at:
-* [https://dri-apps.earthengine.app/view/bor-reservoir-evaporation](https://dri-apps.earthengine.app/view/bor-reservoir-evaporation)
+- [https://dri-apps.earthengine.app/view/bor-reservoir-evaporation](https://dri-apps.earthengine.app/view/bor-reservoir-evaporation)
 
 Or programmatically through the API at:
-* [https://operevap.dri.edu/docs](https://operevap.dri.edu/docs)
+- [https://operevap.dri.edu/docs](https://operevap.dri.edu/docs)
 
 See the [Getting Started](https://operevap.launchpad.wiki/started/getting-started/) section for help with the API.
 
