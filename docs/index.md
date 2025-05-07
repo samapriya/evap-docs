@@ -38,7 +38,11 @@ This dataset and API was collaboratively developed by the Reclamation, Desert Re
 
 ## Disclaimer
 
-Data and information provided through this application are part of an active research project and should be considered provisional and subject to change. A production version of this API and database is scheduled to launch late summer 2025. Users should perform thorough review prior to operational application and decision making..
+Data and information provided through this application are part of an active research project and should be considered provisional and subject to change. A production version of this API and database is scheduled to launch late summer 2025. Users should perform thorough review prior to operational application and decision making.
+
+## Funding and Support
+
+This project received funding from the BOR Research and Development Office (R20AC00008) and NASA Research Opportunities in Space and Earth Science (ROSES) program (80NSSC22K0933). Additional support provided by the USGS, USACE, the Texas Water Development Board, and the Oregon Water Resources Department.
 
 ## Additional Resources
 
