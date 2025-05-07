@@ -4,7 +4,7 @@ Beta Status: This website is currently under development and may have some limit
 
 ## Overview
 
-The BOR Reservoir Evaporation API provides public access to historical, and near-real-time daily evaporation estimates for 247 Bureau of Reclamation reservoirs located across the 17 western states. Reservoir evaporation estimates are generated using the Texas A&M Daily Lake Evaporation Model (DLEM) (Zhao and Gao, 2019; Zhao et al., 2023). 
+The BOR Reservoir Evaporation API provides public access to historical, and near-real-time daily evaporation estimates for 247 Bureau of Reclamation reservoirs located across the 17 western states. Reservoir evaporation estimates are generated using the Texas A&M Daily Lake Evaporation Model (DLEM) (Zhao and Gao, 2019; Zhao et al., 2024). 
 
 This API delivers high-quality data records of evaporation rates and volumes for major reservoirs. The evaporation estimates incorporate meteorological forcing data and reservoir storage information to provide the best available estimates of reservoir evaporation.
 
@@ -45,4 +45,4 @@ Data and information provided through this application are part of an active res
 - De Pondeca, M. S. F. V., and Coauthors, 2011: The Real-Time Mesoscale Analysis at NOAA's National Centers for Environmental Prediction: Current status and development. Wea. Forecasting, 26, 593–612, https://doi.org/10.1175/WAF-D-10-05037.1.
 - Tanny, J., and Coauthors, 2008: Evaporation from a small water reservoir: Direct measurements and estimates. J. Hydrology, 351, 218-229.
 - Zhao, G., and H. Gao, 2019: Estimating reservoir evaporation losses for the united states: Fusing remote sensing and modeling approaches. Remote Sensing of Environment, 226, 109–124.
-- Zhao, B., and Coauthors, 2023: Developing a Daily Lake Evaporation Model and Generating a Long-term Daily Reservoir Evaporation Dataset in Texas. Submitted to Water Resources Research.
+- Zhao, B., Huntington, J., Pearson, C., Zhao, G., Ott, T., Zhu, J., ... & Gao, H. (2024). Developing a general Daily Lake Evaporation Model and demonstrating its application in the state of Texas. Water Resources Research, 60(3), e2023WR036181.
