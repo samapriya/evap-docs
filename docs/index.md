@@ -42,7 +42,7 @@ Data and information provided through this application are part of an active res
 
 ## Funding and Support
 
-This project received funding from the BOR Research and Development Office (R20AC00008) and NASA Research Opportunities in Space and Earth Science (ROSES) program (80NSSC22K0933). Additional support provided by the USGS, USACE, the Texas Water Development Board, and the Oregon Water Resources Department.
+This project received funding from the BOR Research and Development Office (R20AC00008) and NASA Water Resources Program (80NSSC22K0933). Additional support provided by the USGS, USACE, the Texas Water Development Board, and the Oregon Water Resources Department.
 
 ## Additional Resources
 
