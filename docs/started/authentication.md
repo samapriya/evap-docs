@@ -24,31 +24,6 @@ To obtain an API key, you need to make a request to the authentication endpoint:
     print(response.text)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-
-    # API configuration
-    base_url <- "https://operevap.dri.edu"
-
-    # Request an API key
-    url <- paste0(base_url, "/auth/request_key")
-
-    response <- GET(
-      url,
-      query = list(
-        name = "John Doe",
-        email = "john.doe@example.com",
-        justification = "Research on reservoir evaporation for climate impact study"
-      )
-    )
-
-    # Print response
-    content <- content(response, "text", encoding = "UTF-8")
-    cat(content)
-    ```
-
 === "cURL"
 
     ```sh
@@ -91,30 +66,6 @@ Once you have received your API key, you must include it in the header of each A
     print(data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-    library(jsonlite)
-
-    # API configuration
-    # Store your API key in .Renviron for security
-    api_key <- Sys.getenv("OPEREVAP_API_KEY", "YOUR_API_KEY")
-    base_url <- "https://operevap.dri.edu"
-
-    # Make a request using your API key
-    url <- paste0(base_url, "/info/list_datasets")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key)
-    )
-
-    # Parse response
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    print(data)
-    ```
-
 === "cURL"
 
     ```sh
@@ -154,38 +105,6 @@ Once you have received your API key, you must include it in the header of each A
         f.write(csv_data)
     ```
 
-=== "R"
-
-    ```r
-    library(httr)
-
-    # API configuration
-    api_key <- Sys.getenv("OPEREVAP_API_KEY", "YOUR_API_KEY")
-    base_url <- "https://operevap.dri.edu"
-
-    # Get data in CSV format
-    url <- paste0(base_url, "/info/list_datasets")
-
-    response <- GET(
-      url,
-      add_headers("api-key" = api_key),
-      query = list(output_format = "csv")
-    )
-
-    # Get CSV content
-    csv_data <- content(response, "text", encoding = "UTF-8")
-    cat(csv_data)
-
-    # Optionally save to file
-    write(csv_data, file = "datasets.csv")
-
-    # Or read directly into a data frame
-    csv_connection <- textConnection(csv_data)
-    datasets_df <- read.csv(csv_connection)
-    close(csv_connection)
-    print(datasets_df)
-    ```
-
 === "cURL"
 
     ```sh
@@ -205,5 +124,4 @@ Once you have received your API key, you must include it in the header of each A
 - Do not embed your API key directly in client-side code that is accessible to users.
 - Use environment variables or secure configuration files to store your API key:
   - Python: Use `os.environ.get("OPEREVAP_API_KEY")`
-  - R: Use `Sys.getenv("OPEREVAP_API_KEY")`
   - Bash/cURL: Use `export OPEREVAP_API_KEY="your-key"` and reference with `${OPEREVAP_API_KEY}`
