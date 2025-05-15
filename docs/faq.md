@@ -33,7 +33,7 @@ Negative evaporation (or condensation) occurs when the temperature of the water 
 
 <center>
 
-<img src="images/limestone_evap_timeseries.jpg" alt="Image Description" width="800">
+<img src="https://operevap.launchpad.wiki/images/limestone_evap_timeseries.jpg" alt="Image Description" width="800">
 
 </center>
 
