@@ -31,11 +31,9 @@ The reservoir evaporation database is updated daily; however, the gridded weathe
 
 Negative evaporation (or condensation) occurs when the temperature of the water body falls below the dew point of the air above (cold water; moist air). Many models neglect to capture this process, but at certain reservoirs during certain time periods, condensation can account for a substantial portion of a reservoir's water balance. DLEM showed good agreement with negative evaporation estimates from Eddy Covariance at Lake Limestone, TX and other locations.
 
-<center>
-
-<img src="images/limestone_evap_timeseries.jpg" alt="Image Description"  width="800">
-
-</center>
+<div style="text-align: center;">
+  <img src="images/limestone_evap_timeseries.jpg" alt="Image Description" width="800">
+</div>
 
 ## Data I downloaded previously changed?
 
