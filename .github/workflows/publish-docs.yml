@@ -37,6 +37,7 @@ jobs:
             "mkdocs-minify-plugin>=0.3" \
             "mkdocs-rss-plugin>=1.2" \
             "mkdocs-redirects>=1.0" \
+            "markdown==3.7"
 
       - name: Install build dependencies
         run: |
