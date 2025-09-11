@@ -152,6 +152,7 @@ nav:
   - Methods: methods.md
   - Getting Started:
       - Overview: started/getting-started.md
+      - Technical Stack: started/techstack.md
       - Installation: started/authentication.md
       - API Playground: https://operevap.dri.edu/docs
   - API Endpoints:
