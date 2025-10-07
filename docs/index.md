@@ -1,13 +1,12 @@
-# Reservoir Evaporation API Documentation
+# Open Water Evapoation Network
 <img src="images/powell_landscape_cropped.jpg" alt="Image Description"  width="800">
 
 Beta Status: This website is currently under development and may have some limitations or issues. Evaporation data should be considered provisional and not used for operational support or decision making. A production version of this API and database is scheduled to launch late summer 2025. 
 
 ## Overview
 
-The BOR Reservoir Evaporation API provides public access to historical, and near-real-time daily evaporation estimates for 247 Bureau of Reclamation reservoirs located across the 17 western states. Reservoir evaporation estimates are generated using the Texas A&M Daily Lake Evaporation Model (DLEM) (Zhao and Gao, 2019; Zhao et al., 2024). 
+The Open Water Evaporation Network (OWEN), created by researchers from DRI, TAMU, VTech, and Reclamation, offers broad access to DLEM evaporation estimates and provides operational support to stakeholders like Reclamation, the Texas Water Development Board, and the United States Army Corps of Engineers. Within the OWEN ecosystem, partner datasets are organized as individual tables, ensuring consistent and efficient data access. OWEN employs custom scripts and software to generate stakeholder-specific data, facilitating the integration of diverse weather and reservoir information. 
 
-This API delivers high-quality data records of evaporation rates and volumes for major reservoirs. The evaporation estimates incorporate meteorological forcing data and reservoir storage information to provide the best available estimates of reservoir evaporation.
 
 ## About This Project
 
@@ -15,7 +14,11 @@ Open-water evaporation represents a complex physical process that influences bot
 
 Historically, water management agencies such as the Bureau of Reclamation (Reclamation) have relied on evaporation estimates from Class A pans for water budget and accounting purposes. While simple and relatively inexpensive to maintain, Class A pans and the associated evaporation estimates have known biases relative to more advanced estimation techniques. This bias, which can depend on water body characteristics like depth and volume, is often attributed to a lack of heat storage in Class A pans relative to real water bodies.
 
-This project developed a daily reservoir evaporation database which can be freely accessed and visualized by water managers and stakeholders. This database contains historical and near real-time, high quality data records of evaporation rates and volumes for major reservoirs.
+## Reclamation Database
+
+The BOR Reservoir Evaporation API provides public access to historical, and near-real-time daily evaporation estimates for 247 Bureau of Reclamation reservoirs located across the 17 western states. Reservoir evaporation estimates are generated using the Texas A&M Daily Lake Evaporation Model (DLEM) (Zhao and Gao, 2019; Zhao et al., 2024). 
+
+This project developed a daily reservoir evaporation database which can be freely accessed and visualized by water managers and stakeholders. This database contains historical and near real-time, high quality data records of evaporation rates and volumes for major reservoirs. This API delivers high-quality data records of evaporation rates and volumes for major reservoirs. The evaporation estimates incorporate meteorological forcing data and reservoir storage information to provide the best available estimates of reservoir evaporation.
 
 Data can be accessed interactively via the web interface at:
 - [https://dri-apps.earthengine.app/view/bor-reservoir-evaporation](https://dri-apps.earthengine.app/view/bor-reservoir-evaporation)
@@ -24,6 +27,10 @@ Or programmatically through the API at:
 - [https://operevap.dri.edu/docs](https://operevap.dri.edu/docs)
 
 See the [Getting Started](https://operevap.launchpad.wiki/started/getting-started/) section for help with the API.
+
+## Coming Soon
+
+Additional datsets including state-wide estimates for the State of Texas, forecasting, as well as a CONUS-wide modeling effort including over 44,000 water bodies will be incorporated into the OWEN framework in 2026. 
 
 
 ## Collaborative Development
